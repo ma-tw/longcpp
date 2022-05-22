@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+constexpr int cHeight = 6;
+constexpr int plusHeight = 4;
+constexpr int plusUpperSpace = 1;
 const std::string cSymbol[] = {
     "  _____ ",
     " /  ___|",
@@ -16,20 +19,24 @@ const std::string plusSymbol[] = {
     "  |_|  "
 };
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cout << "Expected the number of +" << std::endl;
-        return EXIT_FAILURE;
-    }
-    int plusNumber = std::atoi(argv[1]);
-    for (int i = 0; i < 6; i++) {
+void printAsciiArt(int plusNum) {
+    for (int i = 0; i < cHeight; i++) {
         std::cout << cSymbol[i];
-        if (1 <= i && i <= 4) {
-            for (int j = 0; j < plusNumber; j++) {
+        if (plusUpperSpace <= i && i <= plusHeight) {
+            for (int j = 0; j < plusNum; j++) {
                 std::cout << plusSymbol[i - 1];
             }
         }
         std::cout << std::endl;
     }
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cout << "Error: Expected the number of +" << std::endl;
+        return EXIT_FAILURE;
+    }
+    int inputNum = std::atoi(argv[1]);
+    printAsciiArt(inputNum);
     return EXIT_SUCCESS;
 }
