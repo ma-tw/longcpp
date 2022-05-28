@@ -1,25 +1,20 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
+#include <getopt.h>
+#include "cppascii.hpp"
 
-constexpr int C_HEIGHT = 6;
-constexpr int PLUS_HEIGHT = 4;
-constexpr int SPACE_ABOVE_PLUS = 1;
-const std::string C_SYMBOL[] = {
-    "  _____ ",
-    " /  ___|",
-    "|  |    ",
-    "|  |    ",
-    "|  |___ ",
-    " \\_____|"
-};
-const std::string PLUS_SYMBOL[] = {
-    "   _   ",
-    " _| |_ ",
-    "|_   _|",
-    "  |_|  "
-};
-
-void printAsciiArt(int plusNum) {
+void showUsage(char* exeString) {
+    std::cout << "Usage: " << exeString << " [OPTION] LENGTH" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  -v   Print the ascii art vertically" << std::endl;
+}
+/**
+ * @brief Print an ascii art of C++ horizontally
+ * 
+ * @param plusNum The number of + in the ascii art
+ */
+void printHorizontalAsciiArt(int plusNum) {
     for (int i = 0; i < C_HEIGHT; i++) {
         std::cout << C_SYMBOL[i];
         if (SPACE_ABOVE_PLUS <= i && i <= PLUS_HEIGHT) {
@@ -31,12 +26,40 @@ void printAsciiArt(int plusNum) {
     }
 }
 
+/**
+ * @brief Print an ascii art of C++ vertically
+ * 
+ * @param plusNum The number of + in the ascii art
+ */
+void printVerticalAsciiArt(int plusNum) {
+    for (int i = 0; i < C_HEIGHT; i++) {
+        std::cout << C_SYMBOL[i] << std::endl;
+    }
+    for (int i = 0; i < plusNum; i++) {
+        for (int j = 0; j < PLUS_HEIGHT; j++) {
+            std::cout << " " << PLUS_SYMBOL[j] << std::endl;
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cout << "Error: Expected the number of +" << std::endl;
+    bool vertical = false;
+    int option;
+    while ((option = getopt(argc, argv, "v")) != -1) {
+        if (option == 'v') {
+            vertical = true;
+        }
+        else {
+            showUsage(argv[0]);
+            return EXIT_FAILURE;
+        }
+    }
+    if (optind == argc) {
+        showUsage(argv[0]);
         return EXIT_FAILURE;
     }
-    int inputNum = std::atoi(argv[1]);
-    printAsciiArt(inputNum);
+    int inputNum = std::atoi(argv[argc - 1]);
+    if (vertical) printVerticalAsciiArt(inputNum);
+    else printHorizontalAsciiArt(inputNum);
     return EXIT_SUCCESS;
 }
