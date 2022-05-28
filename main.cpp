@@ -9,6 +9,7 @@ void showUsage(char* exeString) {
     std::cout << std::endl;
     std::cout << "  -v   Print the ascii art vertically" << std::endl;
 }
+
 /**
  * @brief Print an ascii art of C++ horizontally
  * 
